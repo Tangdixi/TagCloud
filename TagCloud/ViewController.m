@@ -8,10 +8,11 @@
 
 #import "ViewController.h"
 
-#import "VVTagCloud.h"
-#import "VVTagInfo.h"
+#import "TagCloud.h"
 
 @interface ViewController ()
+
+@property (nonatomic, strong) TagCloud *tagCloud;
 
 @end
 
@@ -20,27 +21,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
-    VVTagCloud *tagCloud = [[VVTagCloud alloc] init];
-    [tagCloud generateLabelsWithVVTagInfos:self.infos completion:^(NSArray<UILabel *> *labels) {
-        
-    }];
-    
+	
+	[self.view addSubview:self.tagCloud];
+	
+	[self.tagCloud generateCloud];
 }
 
-- (NSArray<VVTagInfo *> *)infos {
-    
-    NSMutableArray *infos = @[].mutableCopy;
-    
-    for (int i = 0; i < 20; i++) {
-        VVTagInfo *info = [[VVTagInfo alloc] init];
-        info.name = i%2? @"我是一个长标签":@"标签";
-        info.count = arc4random_uniform(10) + 1;
-        
-        [infos addObject:info];
-    }
-    
-    return infos.copy;
+#pragma mark - Lazy Loading
+
+- (TagCloud *)tagCloud {
+	
+	if (! _tagCloud) {
+		
+		CGRect cloudRect = CGRectMake(10, 100, CGRectGetWidth([UIScreen mainScreen].bounds) - 20, 400);
+		
+		_tagCloud = [[TagCloud alloc] initWithCloudRect:cloudRect weightedStrings:self.weightedStrings];
+	}
+	return _tagCloud;
+}
+
+- (NSArray<NSDictionary<NSString *, NSNumber *> *> *)weightedStrings {
+	
+	return @[
+			 @{ @"Hello": @20 },
+			 @{ @"Hello": @20 },
+			 @{ @"Hello": @20 },
+			 @{ @"Hello": @20 },
+			 @{ @"Hello": @20 },
+			 @{ @"Hello": @20 },
+			];
 }
 
 @end

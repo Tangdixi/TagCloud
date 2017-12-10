@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		81513E451FD50FC70049ED70 /* VVTagCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 81513E441FD50FC70049ED70 /* VVTagCloud.m */; };
-		81513E481FD516AE0049ED70 /* VVTagInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 81513E471FD516AE0049ED70 /* VVTagInfo.m */; };
+		8150BCD91FDBCE64002CBB3E /* TagCloudCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8150BCD81FDBCE64002CBB3E /* TagCloudCellModel.m */; };
+		8150BCDC1FDD37E0002CBB3E /* TagCloudOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8150BCDB1FDD37E0002CBB3E /* TagCloudOperation.m */; };
+		8150BCDF1FDD7098002CBB3E /* TagCloudCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8150BCDE1FDD7098002CBB3E /* TagCloudCell.m */; };
+		81513E451FD50FC70049ED70 /* TagCloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 81513E441FD50FC70049ED70 /* TagCloud.m */; };
 		81C2C0341FCFC63300CF671A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 81C2C0331FCFC63300CF671A /* AppDelegate.m */; };
 		81C2C0371FCFC63300CF671A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 81C2C0361FCFC63300CF671A /* ViewController.m */; };
 		81C2C03A1FCFC63300CF671A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81C2C0381FCFC63300CF671A /* Main.storyboard */; };
@@ -30,10 +32,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		81513E431FD50FC70049ED70 /* VVTagCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VVTagCloud.h; sourceTree = "<group>"; };
-		81513E441FD50FC70049ED70 /* VVTagCloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VVTagCloud.m; sourceTree = "<group>"; };
-		81513E461FD516AE0049ED70 /* VVTagInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VVTagInfo.h; sourceTree = "<group>"; };
-		81513E471FD516AE0049ED70 /* VVTagInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VVTagInfo.m; sourceTree = "<group>"; };
+		8150BCD71FDBCE64002CBB3E /* TagCloudCellModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TagCloudCellModel.h; sourceTree = "<group>"; };
+		8150BCD81FDBCE64002CBB3E /* TagCloudCellModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagCloudCellModel.m; sourceTree = "<group>"; };
+		8150BCDA1FDD37E0002CBB3E /* TagCloudOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TagCloudOperation.h; sourceTree = "<group>"; };
+		8150BCDB1FDD37E0002CBB3E /* TagCloudOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagCloudOperation.m; sourceTree = "<group>"; };
+		8150BCDD1FDD7098002CBB3E /* TagCloudCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TagCloudCell.h; sourceTree = "<group>"; };
+		8150BCDE1FDD7098002CBB3E /* TagCloudCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagCloudCell.m; sourceTree = "<group>"; };
+		81513E431FD50FC70049ED70 /* TagCloud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TagCloud.h; sourceTree = "<group>"; };
+		81513E441FD50FC70049ED70 /* TagCloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TagCloud.m; sourceTree = "<group>"; };
 		81C2C02F1FCFC63300CF671A /* TagCloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TagCloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81C2C0321FCFC63300CF671A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		81C2C0331FCFC63300CF671A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -94,10 +100,14 @@
 				81C2C0331FCFC63300CF671A /* AppDelegate.m */,
 				81C2C0351FCFC63300CF671A /* ViewController.h */,
 				81C2C0361FCFC63300CF671A /* ViewController.m */,
-				81513E461FD516AE0049ED70 /* VVTagInfo.h */,
-				81513E471FD516AE0049ED70 /* VVTagInfo.m */,
-				81513E431FD50FC70049ED70 /* VVTagCloud.h */,
-				81513E441FD50FC70049ED70 /* VVTagCloud.m */,
+				81513E431FD50FC70049ED70 /* TagCloud.h */,
+				81513E441FD50FC70049ED70 /* TagCloud.m */,
+				8150BCDD1FDD7098002CBB3E /* TagCloudCell.h */,
+				8150BCDE1FDD7098002CBB3E /* TagCloudCell.m */,
+				8150BCDA1FDD37E0002CBB3E /* TagCloudOperation.h */,
+				8150BCDB1FDD37E0002CBB3E /* TagCloudOperation.m */,
+				8150BCD71FDBCE64002CBB3E /* TagCloudCellModel.h */,
+				8150BCD81FDBCE64002CBB3E /* TagCloudCellModel.m */,
 				81C2C0561FCFC64800CF671A /* QuadtreeNode.h */,
 				81C2C0571FCFC64800CF671A /* QuadtreeNode.m */,
 				81C2C0381FCFC63300CF671A /* Main.storyboard */,
@@ -220,12 +230,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81513E481FD516AE0049ED70 /* VVTagInfo.m in Sources */,
 				81C2C0371FCFC63300CF671A /* ViewController.m in Sources */,
+				8150BCDC1FDD37E0002CBB3E /* TagCloudOperation.m in Sources */,
 				81C2C0421FCFC63300CF671A /* main.m in Sources */,
 				81C2C0581FCFC64800CF671A /* QuadtreeNode.m in Sources */,
 				81C2C0341FCFC63300CF671A /* AppDelegate.m in Sources */,
-				81513E451FD50FC70049ED70 /* VVTagCloud.m in Sources */,
+				8150BCDF1FDD7098002CBB3E /* TagCloudCell.m in Sources */,
+				8150BCD91FDBCE64002CBB3E /* TagCloudCellModel.m in Sources */,
+				81513E451FD50FC70049ED70 /* TagCloud.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
