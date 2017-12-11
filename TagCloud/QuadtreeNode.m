@@ -34,7 +34,7 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
     
     // Impossible to put this boundingRect into the current quadtree
     //
-    if (! CGRectContainsRect(self.rect, boundingRect)) {
+    if (! CGRectContainsRect(self.rect, boundingRect) ) {
         return NO;
     }
     
@@ -72,9 +72,9 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
     
     [self.boundingRects enumerateObjectsUsingBlock:^(NSValue * _Nonnull boundingRectValue, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        CGRect boundingRect = boundingRectValue.CGRectValue;
+        CGRect cachedBoundingRect = boundingRectValue.CGRectValue;
         
-        if (CGRectIntersectsRect(self.rect, boundingRect)) {
+        if (CGRectIntersectsRect(cachedBoundingRect, boundingRect)) {
             hit = YES;
             
             // End enumeration
@@ -205,6 +205,11 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
     // Remove the marked bounding rect
     //
     [self.boundingRects removeObjectsInArray:migratedBoundingRects];
+    
+    if (self.boundingRects.count == 0) {
+        self.boundingRects = nil;
+    }
+
 }
 
 - (BOOL)migratedBoundingRect:(CGRect)boundingRect {

@@ -16,7 +16,9 @@
 
 @implementation TagCloudCell
 
-- (instancetype)initWithString:(NSString *)string weight:(NSUInteger)weight {
+static CGFloat kTagCloudCellPadding = 5;
+
+- (instancetype)initWithString:(NSString *)string weight:(NSNumber *)weight {
 	
 	if (self = [super init]) {
 		_string = string;
@@ -29,29 +31,14 @@
 
 - (void)determineRandomTagCloudCellCenterWithTagCloudSize:(CGSize)tagCloudSize {
 	
-	CGPoint randomGaussianPoint = [self randomGaussian];
+	CGPoint randomRatioPoint = [self randomRatio];
 	
-	while (fabs(randomGaussianPoint.x) > 5.0 || fabs(randomGaussianPoint.y) > 5.0) {
-		randomGaussianPoint = [self randomGaussian];
+	while (fabs(randomRatioPoint.x) > 5.0 || fabs(randomRatioPoint.y) > 5.0) {
+		randomRatioPoint = [self randomRatio];
 	}
 	
-	CGFloat xOffset = (tagCloudSize.width / 2.0) + (randomGaussianPoint.x * ((tagCloudSize.width - self.size.width) * 0.1));
-	CGFloat yOffset = (tagCloudSize.height / 2.0) + (randomGaussianPoint.y * ((tagCloudSize.height - self.size.height) * 0.1));
-	
-	self.center = CGPointMake(xOffset, yOffset);
-}
-
-- (void)determineRandomWordPlacementInContainerWithSize:(CGSize)containerSize scale:(CGFloat)scale {
-	
-	CGPoint randomGaussianPoint = [self randomGaussian];
-	
-	while (fabs(randomGaussianPoint.x) > 5.0 || fabs(randomGaussianPoint.y) > 5.0)
-	{
-		randomGaussianPoint = [self randomGaussian];
-	}
-	
-	CGFloat xOffset = (containerSize.width / 2.0) + (randomGaussianPoint.x * ((containerSize.width - self.size.width) * 0.1));
-	CGFloat yOffset = (containerSize.height / 2.0) + (randomGaussianPoint.y * ((containerSize.height - self.size.height) * 0.1));
+	CGFloat xOffset = (tagCloudSize.width / 2.0) + (randomRatioPoint.x * ((tagCloudSize.width - self.size.width) * 0.1));
+	CGFloat yOffset = (tagCloudSize.height / 2.0) + (randomRatioPoint.y * ((tagCloudSize.height - self.size.height) * 0.1));
 	
 	self.center = CGPointMake(xOffset, yOffset);
 }
@@ -64,25 +51,34 @@
 	self.center = CGPointMake(xOffset, yOffset);
 }
 
+- (void)determineTagCloudCellWithSize:(CGSize)size {
+    
+    NSDictionary *attributes = @{
+                                 NSFontAttributeName : [UIFont systemFontOfSize:self.fontSize]
+                                 };
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:self.string attributes:attributes];
+    CGSize attributedStringSize = [attributedString size];
+    
+    self.size = CGSizeMake(attributedStringSize.width + kTagCloudCellPadding * 2, attributedStringSize.height);
+}
+
 #pragma mark - Private
 
-- (CGPoint)randomGaussian {
+- (CGPoint)randomRatio {
 	
 	CGFloat x1, x2, w;
 	
 	do {
-		x1 = 2.0 * drand48() - 1.0;
-		x2 = 2.0 * drand48() - 1.0;
+        x1 = (arc4random() % 100 + 1) / 100.0;
+        x2 = (arc4random() % 100 + 1) / 100.0;
+//        x1 = 2.0 * drand48() - 1.0;
+//        x2 = 2.0 * drand48() - 1.0;
 		w = x1 * x1 + x2 * x2;
 	} while (w >= 1.0);
 	
 	w = sqrt((-2.0 * log(w)) / w);
 	
 	return CGPointMake(x1 * w, x2 * w);
-}
-
-- (NSString *)description {
-	return [NSString stringWithFormat:@"%@: size<%.2f, %.2f> center<%.2f, %.2f> layer:%@", self, self.size.width, self.size.height, self.center.x, self.center.y, self.layer];
 }
 
 #pragma mark - Accessor
@@ -95,16 +91,23 @@
 					  self.size.height);
 }
 
+- (NSNumber *)area {
+    return @(self.rect.size.width * self.rect.size.height);
+}
+
 #pragma mark - Lazy Loading
 
 - (CATextLayer *)layer {
 	
 	if (! _layer) {
 		_layer = [CATextLayer layer];
-		_layer.fontSize = self.weight;
 		_layer.string = self.string;
 		_layer.foregroundColor = UIColor.blackColor.CGColor;
 		_layer.frame = self.rect;
+        _layer.contentsScale = [UIScreen mainScreen].scale;
+        _layer.fontSize = self.fontSize;
+        _layer.borderColor = UIColor.redColor.CGColor;
+        _layer.borderWidth = 1;
 	}
 	return _layer;
 }

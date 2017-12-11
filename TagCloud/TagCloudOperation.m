@@ -34,23 +34,23 @@
 
 - (void)main {
 	
+    if (self.isCancelled) { return; }
+    [self prepareRawTagCloudCells];
+    
 	if (self.isCancelled) { return; }
-	
-	[self determineTagSizes];
-	
-	if (self.isCancelled) { return; }
-	
-	[self determinetagCloudCellsCenterRandomly];
+    [self configureTagCloudCellsWeight];
 	
 	if (self.isCancelled) { return; }
+	[self randomlyPlaceTagCloudCell];
 	
-	[self determinePerfectCenterOftagCloudCells];
+	if (self.isCancelled) { return; }
+	[self perfectlyPlaceTagCloudCell];
 	
 }
 
 #pragma mark - Private
 
-- (void)determineTagSizes {
+- (void)prepareRawTagCloudCells {
 	
 	// Just in case
 	//
@@ -63,28 +63,74 @@
 		if (self.isCancelled) { return; }
 		
 		NSString *string = weightedString.allKeys.firstObject;
-		NSUInteger weight = weightedString.allValues.firstObject.unsignedIntegerValue;
+		NSNumber *weight = weightedString.allValues.firstObject;
 		
 		TagCloudCell *tagCloudCell = [[TagCloudCell alloc] initWithString:string weight:weight];
 		[self.tagCloudCells addObject:tagCloudCell];
 	}];
-	
-	// Determine the maximun and minimum font size
-	//
-	[self.tagCloudCells enumerateObjectsUsingBlock:^(TagCloudCell * _Nonnull tagCloudCell, NSUInteger idx, BOOL * _Nonnull stop) {
-		
-		if (self.isCancelled) { return; }
-		
-		// Temporary size
-		//
-		tagCloudCell.size = CGSizeMake(60, 30);
-		
-		
-	}];
-	
 }
 
-- (void)determinetagCloudCellsCenterRandomly {
+
+
+- (void)configureTagCloudCellsWeight {
+    
+    // Determine minimum and maximum weight of words
+    
+    CGFloat minimumWeight = [[self.tagCloudCells valueForKeyPath:@"@min.weight"] doubleValue];
+    CGFloat maximumWeight = [[self.tagCloudCells valueForKeyPath:@"@max.weight"] doubleValue];
+    
+    CGFloat deltaWordCount = maximumWeight - minimumWeight;
+    CGFloat ratioCap = 20.0;
+    CGFloat maxMinRatio = MIN((maximumWeight / minimumWeight), ratioCap);
+    
+    // Start with these values, which will be decreased as needed that all the words may fit the container
+    
+    __block CGFloat fontMin = 12.0;
+    __block CGFloat fontMax = fontMin * maxMinRatio;
+    __block BOOL tagCellAreaExceedsContainerSize = NO;
+    
+    NSInteger dynamicTypeDelta = 6;
+    
+    CGFloat containerArea = self.cloudRect.size.width * self.cloudRect.size.height * 0.9;
+    
+    do {
+       
+        __block CGFloat tagCellArea = 0.0;
+        tagCellAreaExceedsContainerSize = NO;
+        
+        CGFloat fontRange = fontMax - fontMin;
+        CGFloat fontStep = 3.0;
+        
+        // Normalize word weights
+        
+        [self.tagCloudCells enumerateObjectsUsingBlock:^(TagCloudCell * _Nonnull tagCloudCell, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            if (self.isCancelled) { return; }
+            
+            CGFloat scale = (tagCloudCell.weight.integerValue - minimumWeight) / deltaWordCount;
+            tagCloudCell.fontSize = fontMin + (fontStep * floor(scale * (fontRange / fontStep))) + dynamicTypeDelta;
+            
+            [tagCloudCell determineTagCloudCellWithSize:self.cloudRect.size];
+            
+            // Check to see if the current word fits in the container
+            
+            tagCellArea += tagCloudCell.area.doubleValue;
+            
+            if (tagCellArea >= containerArea || tagCloudCell.size.width >= self.cloudRect.size.width || tagCloudCell.size.height >= self.cloudRect.size.height) {
+                
+                tagCellAreaExceedsContainerSize = YES;
+                fontMin--;
+                fontMax = fontMin * maxMinRatio;
+                return;
+            }
+        }];
+        
+    } while (tagCellAreaExceedsContainerSize);
+    
+    return;
+}
+
+- (void)randomlyPlaceTagCloudCell {
 	
 	[self.tagCloudCells enumerateObjectsUsingBlock:^(TagCloudCell * _Nonnull tagCloudCell, NSUInteger idx, BOOL * _Nonnull stop) {
 		
@@ -93,39 +139,46 @@
 		// Generate a random center
 		//
 		[tagCloudCell determineRandomTagCloudCellCenterWithTagCloudSize:self.cloudRect.size];
-		
 	}];
 }
 
-- (void)determinePerfectCenterOftagCloudCells {
+- (void)perfectlyPlaceTagCloudCell {
 
+    // Sort the tag cloud cells for the following collision detection
+    //
+    NSSortDescriptor *primarySortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"area" ascending:NO];
+    NSSortDescriptor *secondarySortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"fontSize" ascending:NO];
+    self.tagCloudCells = [self.tagCloudCells sortedArrayUsingDescriptors:@[primarySortDescriptor, secondarySortDescriptor]].mutableCopy;
+    
+    // Collision detectionfi
+    //
 	[self.tagCloudCells enumerateObjectsUsingBlock:^(TagCloudCell * _Nonnull tagCloudCell, NSUInteger idx, BOOL * _Nonnull stop) {
 		
 		if (self.isCancelled) { return; }
 		
 		// Placed, skip to next tag cloud cell
 		//
-		if ([self placedTagCloudCell:tagCloudCell]) {
+		if ([self hasPlacedTagCloudCell:tagCloudCell]) {
 			return;
 		}
 		
-		for (int index = 0; index < 100; index++) {
+		for (int index = 0; index < 50; index++) {
 		
 			if (self.isCancelled) { return; }
 			
 			if ([self foundConcentricPlacementWithTagCloudCell:tagCloudCell]) {
-				break;
+                return;
 			}
 			
 			if (self.isCancelled) { return; }
 		
 			[tagCloudCell determineRandomTagCloudCellCenterWithTagCloudSize:self.cloudRect.size];
-			
 		}
 	}];
+    
 }
 
-- (BOOL)placedTagCloudCell:(TagCloudCell *)tagCloudCell {
+- (BOOL)hasPlacedTagCloudCell:(TagCloudCell *)tagCloudCell {
 	
 	// Hit a previous bounding rect, return and try again
 	//
@@ -177,7 +230,7 @@
 		//
 		NSUInteger degreeStep = radiusMultiplier == 1 ? 15 : radiusMultiplier == 2 ? 10 : 5;
 		
-		CGFloat radius = radiusMultiplier * tagCloudCell.weight;
+		CGFloat radius = radiusMultiplier * tagCloudCell.fontSize;
 		
 		radiusWithinContainerSize = NO; // NO until proven otherwise
 		
@@ -194,10 +247,10 @@
 			//
 			[tagCloudCell determineTagCloudCellWithCenter:savedCenter xOffset:x yOffset:y];
 			
-			if (CGRectContainsRect(containerRect, tagCloudCell.rect))
-			{
+			if (CGRectContainsRect(containerRect, tagCloudCell.rect)) {
+                
 				radiusWithinContainerSize = YES;
-				if ([self placedTagCloudCell:tagCloudCell]) {
+				if ([self hasPlacedTagCloudCell:tagCloudCell]) {
 					return YES;
 				}
 			}

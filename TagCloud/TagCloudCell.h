@@ -17,12 +17,16 @@
 @property (nonatomic, strong, readonly) CATextLayer *layer;
 @property (nonatomic, copy) NSDictionary *info;
 @property (nonatomic, copy) NSString *string;
-@property (nonatomic, assign) NSUInteger weight;
+@property (nonatomic, strong) NSNumber *weight;
+@property (nonatomic, assign) CGFloat fontSize;
+@property (nonatomic, strong) NSNumber *area;
 
-- (instancetype)initWithString:(NSString *)string weight:(NSUInteger)weight;
+- (instancetype)initWithString:(NSString *)string weight:(NSNumber *)weight;
 
 - (void)determineRandomTagCloudCellCenterWithTagCloudSize:(CGSize)tagCloudSize;
 
 - (void)determineTagCloudCellWithCenter:(CGPoint)center xOffset:(CGFloat)xOffset yOffset:(CGFloat)yOffset;
+
+- (void)determineTagCloudCellWithSize:(CGSize)size;
 
 @end
