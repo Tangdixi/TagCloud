@@ -59,7 +59,7 @@ static CGFloat kTagCloudCellPadding = 5;
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:self.string attributes:attributes];
     CGSize attributedStringSize = [attributedString size];
     
-    self.size = CGSizeMake(attributedStringSize.width + kTagCloudCellPadding * 2, attributedStringSize.height);
+    self.size = CGSizeMake(attributedStringSize.width + 10, attributedStringSize.height + 5);
 }
 
 #pragma mark - Private
@@ -69,10 +69,10 @@ static CGFloat kTagCloudCellPadding = 5;
 	CGFloat x1, x2, w;
 	
 	do {
-        x1 = (arc4random() % 100 + 1) / 100.0;
-        x2 = (arc4random() % 100 + 1) / 100.0;
-//        x1 = 2.0 * drand48() - 1.0;
-//        x2 = 2.0 * drand48() - 1.0;
+//        x1 = (arc4random() % 100 + 1) / 100.0;
+//        x2 = (arc4random() % 100 + 1) / 100.0;
+        x1 = 2.0 * drand48() - 1.0;
+        x2 = 2.0 * drand48() - 1.0;
 		w = x1 * x1 + x2 * x2;
 	} while (w >= 1.0);
 	
@@ -108,6 +108,8 @@ static CGFloat kTagCloudCellPadding = 5;
         _layer.fontSize = self.fontSize;
         _layer.borderColor = UIColor.redColor.CGColor;
         _layer.borderWidth = 1;
+		_layer.cornerRadius = self.rect.size.height/2;
+		_layer.alignmentMode = kCAAlignmentCenter;
 	}
 	return _layer;
 }

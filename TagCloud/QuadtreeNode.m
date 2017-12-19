@@ -103,7 +103,7 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
         // The bounding rect is completely fits within the top left node's rect, no need to check to other child node
         //
         if (CGRectContainsRect(self.topLeftNode.rect, boundingRect)) {
-            return YES;
+            return NO;
         }
     }
     
@@ -117,7 +117,7 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
         // The bounding rect is completely fits within the top right node's rect, no need to check to other child node
         //
         if (CGRectContainsRect(self.topRightNode.rect, boundingRect)) {
-            return YES;
+            return NO;
         }
     }
     
@@ -131,7 +131,7 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
         // The bounding rect is completely fits within the bottom left node's rect, no need to check to other child node
         //
         if (CGRectContainsRect(self.bottomLeftNode.rect, boundingRect)) {
-            return YES;
+            return NO;
         }
     }
     
@@ -145,7 +145,7 @@ static NSInteger kQuadtreeBoundingRectThreshold = 8;
         // The bounding rect is completely fits within the bottom right node's rect, no need to check to other child node
         //
         if (CGRectContainsRect(self.bottomRightNode.rect, boundingRect)) {
-            return YES;
+            return NO;
         }
     }
     

@@ -174,6 +174,7 @@
 		
 			[tagCloudCell determineRandomTagCloudCellCenterWithTagCloudSize:self.cloudRect.size];
 		}
+		
 	}];
     
 }
@@ -182,7 +183,7 @@
 	
 	// Hit a previous bounding rect, return and try again
 	//
-	if ([self.quadtree hitBoundingRect:tagCloudCell.rect]) {
+	if ([self.quadtree hitBoundingRect:CGRectInset(tagCloudCell.rect, -5, -5)]) {
 		return NO;
 	}
 	

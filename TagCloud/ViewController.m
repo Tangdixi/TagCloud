@@ -34,9 +34,9 @@
 	
 	if (! _tagCloud) {
         
-        CGRect cloudRect = CGRectMake(0, 0, 300, 300);
+        CGRect cloudRect = CGRectMake(0, 0, 365, 365);
         
-		_tagCloud = [[TagCloud alloc] initWithCloudRect:self.view.bounds
+		_tagCloud = [[TagCloud alloc] initWithCloudRect:cloudRect
                                         weightedStrings:self.weightedStrings];
         _tagCloud.backgroundColor = UIColor.whiteColor;
         _tagCloud.center = self.view.center;
@@ -48,17 +48,17 @@
 - (NSArray<NSDictionary<NSString *, NSNumber *> *> *)weightedStrings {
 	
     NSMutableArray *datas = @[
-                              @{ @"Hello": @10 },
-                              @{ @"Hi": @8 },
-                              @{ @"Goodbye": @7 },
-                              @{ @"Well": @3 },
-                              @{ @"GG": @3 },
-                              @{ @"See You": @3 },
-                              @{ @"Genius": @3 },
-                              @{ @"Over": @2 }].mutableCopy;
+                              @{ @"会撩人": @3 },
+                              @{ @"唱湿了我": @2 },
+                              @{ @"哈哈哈": @2 },
+                              @{ @"嘿嘿": @2 },
+                              @{ @"怎么那么帅": @2 },
+                              @{ @"我的天啊": @2 },
+                              @{ @"吴彦祖！": @2 },
+                              @{ @"你好啊": @2 }].mutableCopy;
     
-    for (int i = 0; i < 1; i++) {
-        [datas addObject:@{ @"XXXXX !": @1 }];
+    for (int i = 0; i < 22; i++) {
+        [datas addObject:@{ @"Kawaii": @1 }];
     }
     
     return datas;
